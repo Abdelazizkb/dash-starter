@@ -1,5 +1,5 @@
 const UsersList = () => {
-  return <div className="bg-amber-400">UsersList</div>;
+  return <div className="">UsersList</div>;
 };
 
 export default UsersList;
