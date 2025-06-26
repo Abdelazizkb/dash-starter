@@ -6,7 +6,11 @@ export interface IMain extends React.FC<PropsWithChildren> {
 }
 
 const Main: IMain = ({ children }) => {
-  return <div className="p-4 flex flex-col items-start gap-4">{children}</div>;
+  return (
+    <div className="p-10 h-full w-full flex flex-col items-start gap-16">
+      {children}
+    </div>
+  );
 };
 
 const Header: React.FC<PropsWithChildren> = ({ children }) => {
@@ -14,7 +18,7 @@ const Header: React.FC<PropsWithChildren> = ({ children }) => {
 };
 
 const Content: React.FC<PropsWithChildren> = ({ children }) => {
-  return <div className="">{children}</div>;
+  return <div className="h-full w-full">{children}</div>;
 };
 
 Main.Content = Content;
