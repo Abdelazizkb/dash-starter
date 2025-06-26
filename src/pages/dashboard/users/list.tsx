@@ -23,7 +23,7 @@ import {
   Table,
 } from "@/components";
 import DashboardLayout from "@/layout/dashboard";
-import db from "../../../db.json";
+import { useUsers } from "./queries";
 
 interface IUser {
   id: string;
@@ -37,6 +37,10 @@ interface IUser {
 const { Main } = DashboardLayout;
 const { Header, Content } = Main;
 const UsersList = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data, isLoading } = useUsers();
+
+  console.log({ data });
   return (
     <Main>
       <Header>
@@ -68,11 +72,11 @@ const UsersList = () => {
               columns={[
                 {
                   label: "First Name",
-                  key: "firstName",
+                  key: "firstname",
                 },
                 {
                   label: "Last Name",
-                  key: "lastName",
+                  key: "lastname",
                 },
                 {
                   label: "Email",
@@ -107,7 +111,8 @@ const UsersList = () => {
                   key: "comment",
                 },
               ]}
-              data={db}
+              data={data?.data}
+              isLoading={isLoading}
             />
           </CardContent>
           <CardFooter className="flex-col gap-2">

@@ -6,7 +6,7 @@ import { worker } from "./mocks";
 
 console.log("## mocks is not running ##", import.meta.env.VITE_ENVIRONMENT);
 
-if (import.meta.env.VITE_ENVIRONMENT === "development") {
+if (import.meta.env.VITE_ENVIRONMENT === "DEVELOPMENT") {
   console.log("## mocks is running ##");
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   worker.start();
