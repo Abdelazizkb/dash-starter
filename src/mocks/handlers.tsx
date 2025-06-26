@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/mocks/handlers.ts
 import { http, HttpResponse } from "msw";
 import { faker } from "@faker-js/faker";
@@ -43,5 +42,5 @@ export const handlers = [
       limit,
       data: paginated,
     });
-  }) as any,
+  }),
 ];
