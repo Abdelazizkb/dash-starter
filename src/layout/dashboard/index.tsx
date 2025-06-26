@@ -16,7 +16,7 @@ const DashboardLayout: ILayout = ({ children }) => {
         <Header />
         <main className="flex relative">
           <Sidebar />
-          <div className="flex-1">
+          <div className="flex-1 h-full">
             <Suspense fallback={<Loader />}>{children}</Suspense>
           </div>
         </main>
