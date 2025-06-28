@@ -18,13 +18,8 @@ interface Props<TData> {
   columns?: Array<{
     label?: string;
     key: string;
-    centredLabel?: boolean;
     cellRenderer?: (props: cellRendererProps<TData>) => any;
     className?: string;
-    width?: number;
-    maxWidth?: number;
-    minWidth?: number;
-    textJustify?: boolean;
   }>;
   data?: {
     [key: string]: any;
@@ -56,7 +51,7 @@ function Table<TData>({
 
   const renderHeader = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return columns.map(({ key, label, ...column }, index) => {
+    return columns.map(({ key, label, cellRenderer, ...column }, index) => {
       return (
         <TableHead {...column} key={index}>
           <p>{label}</p>
@@ -107,8 +102,8 @@ function Table<TData>({
           <TableRow className="rounded-t-md">{renderHeader()}</TableRow>
         </TableHeader>
         <TableBody>{renderBody()}</TableBody>
-        {isLoading && <Loader />}
       </BaseTable>
+      {isLoading && <Loader />}
     </div>
   );
 }
