@@ -23,6 +23,7 @@ import { SelectTrigger } from "@radix-ui/react-select";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserForm } from "./use-form";
 import { useEffect } from "react";
+import { useCreateUser, useUpdateUser } from "./queries";
 
 const CreateOrEditUserModal: React.FC<IPopup<IUser>> = (props) => {
   const {
@@ -34,9 +35,16 @@ const CreateOrEditUserModal: React.FC<IPopup<IUser>> = (props) => {
     formState: { errors },
   } = useUserForm(props.data);
 
+  const { mutate: createUser } = useCreateUser({
+    onSettled: props.close,
+  });
+  const { mutate: updateUser } = useUpdateUser({
+    onSettled: props.close,
+  });
+
   const onSubmit = (data: IUser) => {
-    console.log("submit", { data });
-    props.close();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    !props.data?.id ? createUser(data) : updateUser(data);
   };
 
   useEffect(() => {

@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const userSchema = z.object({
-  id: z.string().min(1, "ID requis"),
   firstname: z.string().min(1, "Prénom requis"),
   lastname: z.string().min(1, "Nom requis"),
   email: z.string().min(1, "Email requis").email("Email invalide"),

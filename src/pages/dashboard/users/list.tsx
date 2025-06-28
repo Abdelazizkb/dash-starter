@@ -29,7 +29,7 @@ import usePopup from "@/lib/use-popup";
 import { Edit } from "lucide-react";
 
 export interface IUser {
-  id: string;
+  id?: string;
   firstname: string;
   lastname: string;
   email: string;
