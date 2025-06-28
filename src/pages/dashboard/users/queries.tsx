@@ -5,7 +5,7 @@ import {
   type UseMutationOptions,
 } from "@tanstack/react-query";
 import type { IUser } from "./list";
-import { toast } from "sonner";
+import { toast } from "@/components";
 
 export function useUsers() {
   return useQuery({
@@ -20,22 +20,8 @@ export function useCreateUser(
   return useMutation({
     mutationFn: (data: IUser) => api.post(`users/create`, data),
     mutationKey: ["users", "create"],
-    onSuccess: () =>
-      toast.success("User created successfully!!", {
-        style: {
-          backgroundColor: "#ecfdf5",
-          color: "#166534",
-          border: "1px solid #86efac",
-        },
-      }),
-    onError: () =>
-      toast.error("User creation failed!!", {
-        style: {
-          backgroundColor: "#fef2f2",
-          color: "#991b1b",
-          border: "1px solid #fca5a5",
-        },
-      }),
+    onSuccess: () => toast.success("User created successfully!!"),
+    onError: () => toast.error("User creation failed!!"),
     ...config,
   });
 }
@@ -46,22 +32,8 @@ export function useUpdateUser(
   return useMutation({
     mutationFn: (data: IUser) => api.put(`users/update`, data),
     mutationKey: ["users", "update"],
-    onSuccess: () =>
-      toast.success("User updated successfully!!", {
-        style: {
-          backgroundColor: "#ecfdf5",
-          color: "#166534",
-          border: "1px solid #86efac",
-        },
-      }),
-    onError: () =>
-      toast.error("User creation failed!!", {
-        style: {
-          backgroundColor: "#fef2f2",
-          color: "#991b1b",
-          border: "1px solid #fca5a5",
-        },
-      }),
+    onSuccess: () => toast.success("User updated successfully!!"),
+    onError: () => toast.error("User creation failed!!"),
     ...config,
   });
 }
