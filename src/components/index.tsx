@@ -7,3 +7,4 @@ export * from "./ui/sidebar";
 export * from "./ui/breadcrumb";
 export * from "./ui/card";
 export * from "./ui/pagination";
+export * from "./ui/dialog";

@@ -20,7 +20,7 @@ function generateUser(): User {
     lastname: faker.person.lastName(),
     email: faker.internet.email(),
     role: faker.helpers.arrayElement(roles),
-    comment: faker.datatype.boolean() ? faker.lorem.sentence() : undefined,
+    comment: faker.lorem.paragraph(),
   };
 }
 
@@ -29,7 +29,7 @@ const USERS = Array.from({ length: 157 }, generateUser); // Simulate 157 users
 export const handlers = [
   http.get("http://dash-starter.com/api/users", () => {
     const page = 1;
-    const limit = 20;
+    const limit = 5;
 
     const start = (page - 1) * limit;
     const end = start + limit;

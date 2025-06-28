@@ -24,11 +24,14 @@ import {
 } from "@/components";
 import DashboardLayout from "@/layout/dashboard";
 import { useUsers } from "./queries";
+import CreateOrEditUserModal from "./create-or-edit";
+import usePopup from "@/lib/use-popup";
+import { Edit } from "lucide-react";
 
-interface IUser {
+export interface IUser {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
   role: "admin" | "editor" | "viewer";
   comment?: string;
@@ -37,10 +40,9 @@ interface IUser {
 const { Main } = DashboardLayout;
 const { Header, Content } = Main;
 const UsersList = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, isLoading } = useUsers();
+  const createOrEditModal = usePopup<IUser | undefined>();
 
-  console.log({ data });
   return (
     <Main>
       <Header>
@@ -57,19 +59,25 @@ const UsersList = () => {
         </Breadcrumb>
       </Header>
       <Content>
-        <Card className="w-full h-full">
+        <Card className="max-w-full h-full">
           <CardHeader>
             <CardTitle>Users management</CardTitle>
             <CardDescription>
               Enter your email below to login to your account
             </CardDescription>
             <CardAction>
-              <Button>New User</Button>
+              <Button onClick={() => createOrEditModal.open(undefined)}>
+                New User
+              </Button>
             </CardAction>
           </CardHeader>
           <CardContent>
             <Table<IUser>
               columns={[
+                {
+                  label: "Id",
+                  key: "id",
+                },
                 {
                   label: "First Name",
                   key: "firstname",
@@ -81,7 +89,6 @@ const UsersList = () => {
                 {
                   label: "Email",
                   key: "email",
-                  minWidth: 200,
                 },
                 {
                   label: "Role",
@@ -109,6 +116,26 @@ const UsersList = () => {
                 {
                   label: "Comment",
                   key: "comment",
+                  className: "max-w-[200px] overflow-hidden text-ellipsis",
+                },
+                {
+                  label: "Actions",
+                  key: "id",
+                  cellRenderer({ rowData }) {
+                    return (
+                      <span className="h-10 overflow-hidden">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() =>
+                            createOrEditModal.open(rowData as IUser)
+                          }
+                        >
+                          <Edit />
+                        </Button>
+                      </span>
+                    );
+                  },
                 },
               ]}
               data={data?.data}
@@ -135,6 +162,7 @@ const UsersList = () => {
           </CardFooter>
         </Card>
       </Content>
+      <CreateOrEditUserModal {...createOrEditModal} />
     </Main>
   );
 };
