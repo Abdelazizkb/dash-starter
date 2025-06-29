@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ReactNode } from "react";
 import Loader from "../loader";
 import {
   Table as BaseTable,
@@ -28,7 +29,7 @@ interface Props<TData> {
   frozen?: "left" | "right";
   isLoading?: boolean;
   onDoubleClick?: (rowData?: TData) => void;
-  /* pagination?: IPagination; */
+  empty?: ReactNode;
 }
 
 function Table<TData>({
@@ -38,6 +39,7 @@ function Table<TData>({
   frozen = "right",
   isLoading,
   onDoubleClick,
+  empty,
 }: /*   pagination,
  */ Props<TData>) {
   const cellData = (
@@ -75,7 +77,7 @@ function Table<TData>({
           )}
           {columns.map(({ key, cellRenderer, ...column }, index) => {
             return (
-              <TableCell {...column} key={index}>
+              <TableCell className="py-4" {...column} key={index}>
                 {cellRenderer
                   ? cellRenderer({
                       rowData: item,
@@ -96,12 +98,24 @@ function Table<TData>({
   };
 
   return (
-    <div className="border-1 rounded-md">
+    <div className="border-1 rounded-md min-h-[345px]">
       <BaseTable className="rounded-md overflow-hidden">
         <TableHeader className="bg-gray-50 hover:bg-gray-50 rounded-t-md">
           <TableRow className="rounded-t-md">{renderHeader()}</TableRow>
         </TableHeader>
-        <TableBody>{renderBody()}</TableBody>
+        <TableBody>
+          {renderBody()}
+          {!data.length && (
+            <TableRow>
+              <TableCell
+                colSpan={7}
+                className="text-center text-muted-foreground py-20"
+              >
+                {empty}
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
       </BaseTable>
       {isLoading && <Loader />}
     </div>

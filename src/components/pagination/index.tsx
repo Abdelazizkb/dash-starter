@@ -22,31 +22,43 @@ const Pagination: React.FC<IProps> = ({
   return (
     <BasePagination>
       <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            href="#"
-            onClick={() => onPageChange(parseInt(currentPage) - 1)}
-          />
-        </PaginationItem>
-
-        {Array.from({ length: totalPages > 5 ? 5 : totalPages }, (_, i) => (
-          <PaginationItem key={i + 1}>
-            <PaginationLink
+        {parseInt(currentPage) > 1 && (
+          <PaginationItem>
+            <PaginationPrevious
               href="#"
-              isActive={parseInt(currentPage) === i + 1}
-              onClick={() => onPageChange(i + 1)}
-            >
-              {i + 1}
+              onClick={() => onPageChange(parseInt(currentPage) - 1)}
+            />
+          </PaginationItem>
+        )}
+
+        {totalPages === 0 ? (
+          <PaginationItem key={1}>
+            <PaginationLink href="#" isActive>
+              1
             </PaginationLink>
           </PaginationItem>
-        ))}
+        ) : (
+          Array.from({ length: totalPages > 5 ? 5 : totalPages }, (_, i) => (
+            <PaginationItem key={i + 1}>
+              <PaginationLink
+                href="#"
+                isActive={parseInt(currentPage) === i + 1}
+                onClick={() => onPageChange(i + 1)}
+              >
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))
+        )}
 
-        <PaginationItem>
-          <PaginationNext
-            href="#"
-            onClick={() => onPageChange(parseInt(currentPage) + 1)}
-          />
-        </PaginationItem>
+        {totalPages > parseInt(currentPage) && (
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={() => onPageChange(parseInt(currentPage) + 1)}
+            />
+          </PaginationItem>
+        )}
       </PaginationContent>
     </BasePagination>
   );

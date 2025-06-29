@@ -13,6 +13,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Input,
   Pagination,
   Table,
 } from "@/components";
@@ -20,9 +21,9 @@ import DashboardLayout from "@/layout/dashboard";
 import { useUsers } from "./queries";
 import CreateOrEditUserModal from "./create-or-edit";
 import usePopup from "@/lib/use-popup";
-import { Edit } from "lucide-react";
+import { Edit, Search, User } from "lucide-react";
 import { usePagination } from "@/lib/use-pagination";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export interface IUser {
   id?: string;
@@ -36,17 +37,19 @@ export interface IUser {
 const { Main } = DashboardLayout;
 const { Header, Content } = Main;
 const UsersList = () => {
+  const [filter, filterUsers] = useState<string>();
   const { currentPage, onPageChange } = usePagination();
 
   const { data, isLoading, refetch } = useUsers({
     page: currentPage,
+    filter,
   });
 
   const createOrEditModal = usePopup<IUser | undefined>();
 
   useEffect(() => {
     refetch();
-  }, [currentPage]);
+  }, [currentPage, filter]);
 
   return (
     <Main>
@@ -70,7 +73,17 @@ const UsersList = () => {
             <CardDescription>
               Some text describe table or module content
             </CardDescription>
-            <CardAction>
+            <CardAction className="flex gap-2">
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder={"Filter users"}
+                  value={filter}
+                  onChange={(e) => filterUsers(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
               <Button onClick={() => createOrEditModal.open(undefined)}>
                 New User
               </Button>
@@ -145,6 +158,12 @@ const UsersList = () => {
               ]}
               data={data?.data}
               isLoading={isLoading}
+              empty={
+                <div className="flex flex-col items-center justify-center gap-6">
+                  <User size={64} />
+                  <span>No users found</span>
+                </div>
+              }
             />
           </CardContent>
           <CardFooter className="flex-col gap-2">
