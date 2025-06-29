@@ -1,45 +1,32 @@
 // src/mocks/handlers.ts
 import { http, HttpResponse } from "msw";
-import { faker } from "@faker-js/faker";
 import type { IUser } from "@/pages/dashboard/users/list";
-
-type User = {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  role: "admin" | "editor" | "viewer";
-  comment?: string;
-};
-
-const roles = ["admin", "editor", "viewer"] as const;
-
-function generateUser(): User {
-  return {
-    id: faker.string.uuid(),
-    firstname: faker.person.firstName(),
-    lastname: faker.person.lastName(),
-    email: faker.internet.email(),
-    role: faker.helpers.arrayElement(roles),
-    comment: faker.lorem.paragraph(),
-  };
-}
-
-const USERS = Array.from({ length: 157 }, generateUser); // Simulate 157 users
+import USERS from "../db.json";
 
 export const handlers = [
-  http.get("http://dash-starter.com/api/users", ({ request }) => {
+  http.get("https://dash-starter.com/api/users", ({ request }) => {
     const url = new URL(request.url);
-    console.log({ url });
+
+    const filter = url.searchParams.get("filter");
 
     const page = parseInt(url.searchParams.get("page") || "1");
-    const limit = parseInt(url.searchParams.get("limit") || "10");
+    const limit = parseInt(url.searchParams.get("limit") || "5");
 
     const start = (page - 1) * limit;
     const end = start + limit;
+    let FilteredUsers: typeof USERS = [];
 
-    const paginated = USERS.slice(start, end);
-    const totalPages = Math.ceil(USERS.length / limit);
+    if (filter) {
+      FilteredUsers = USERS.filter((user) =>
+        `${user.firstname} ${user.lastname}`.toLowerCase().includes(filter)
+      );
+      console.log({ FilteredUsers });
+    }
+
+    const paginated = (filter ? FilteredUsers : USERS).slice(start, end);
+    const totalPages = Math.ceil(
+      (filter ? FilteredUsers : USERS).length / limit
+    );
 
     return HttpResponse.json({
       total: USERS.length,
@@ -51,24 +38,27 @@ export const handlers = [
     });
   }),
 
-  http.post("http://dash-starter.com/api/users/create", async ({ request }) => {
-    const body = (await request.json()) as IUser;
+  http.post(
+    "https://dash-starter.com/api/users/create",
+    async ({ request }) => {
+      const body = (await request.json()) as IUser;
 
-    const newUser: IUser = {
-      firstname: body.firstname,
-      lastname: body.lastname,
-      email: body.email,
-      role: body.role,
-      comment: body.comment || "",
-    };
+      const newUser: IUser = {
+        firstname: body.firstname,
+        lastname: body.lastname,
+        email: body.email,
+        role: body.role,
+        comment: body.comment || "",
+      };
 
-    return HttpResponse.json({
-      message: "User added successfully",
-      user: newUser,
-    });
-  }),
+      return HttpResponse.json({
+        message: "User added successfully",
+        user: newUser,
+      });
+    }
+  ),
 
-  http.put("http://dash-starter.com/api/users/update", async ({ request }) => {
+  http.put("https://dash-starter.com/api/users/update", async ({ request }) => {
     const body = (await request.json()) as IUser;
 
     const newUser: IUser = {

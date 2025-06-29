@@ -9,4 +9,5 @@ export * from "./ui/breadcrumb";
 export * from "./ui/card";
 export * from "./ui/dialog";
 export * from "./ui/sonner";
+export * from "./ui/input";
 export * from "./toast";
