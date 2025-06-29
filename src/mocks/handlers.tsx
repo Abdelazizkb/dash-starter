@@ -30,6 +30,8 @@ const USERS = Array.from({ length: 157 }, generateUser); // Simulate 157 users
 export const handlers = [
   http.get("http://dash-starter.com/api/users", ({ request }) => {
     const url = new URL(request.url);
+    console.log({ url });
+
     const page = parseInt(url.searchParams.get("page") || "1");
     const limit = parseInt(url.searchParams.get("limit") || "10");
 
@@ -37,9 +39,12 @@ export const handlers = [
     const end = start + limit;
 
     const paginated = USERS.slice(start, end);
+    const totalPages = Math.ceil(USERS.length / limit);
 
     return HttpResponse.json({
       total: USERS.length,
+      totalPages,
+      hasNextPage: totalPages > page,
       page,
       limit,
       data: paginated,

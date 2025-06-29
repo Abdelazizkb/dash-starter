@@ -7,10 +7,10 @@ import {
 import type { IUser } from "./list";
 import { toast } from "@/components";
 
-export function useUsers() {
+export function useUsers(params: object) {
   return useQuery({
     queryKey: ["users"],
-    queryFn: async () => api.get("users").then(({ data }) => data),
+    queryFn: async () => api.get("users", { params }).then(({ data }) => data),
   });
 }
 

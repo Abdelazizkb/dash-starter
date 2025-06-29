@@ -14,12 +14,6 @@ import {
   CardHeader,
   CardTitle,
   Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
   Table,
 } from "@/components";
 import DashboardLayout from "@/layout/dashboard";
@@ -27,6 +21,8 @@ import { useUsers } from "./queries";
 import CreateOrEditUserModal from "./create-or-edit";
 import usePopup from "@/lib/use-popup";
 import { Edit } from "lucide-react";
+import { usePagination } from "@/lib/use-pagination";
+import { useEffect } from "react";
 
 export interface IUser {
   id?: string;
@@ -40,8 +36,17 @@ export interface IUser {
 const { Main } = DashboardLayout;
 const { Header, Content } = Main;
 const UsersList = () => {
-  const { data, isLoading } = useUsers();
+  const { currentPage, onPageChange } = usePagination();
+
+  const { data, isLoading, refetch } = useUsers({
+    page: currentPage,
+  });
+
   const createOrEditModal = usePopup<IUser | undefined>();
+
+  useEffect(() => {
+    refetch();
+  }, [currentPage]);
 
   return (
     <Main>
@@ -63,7 +68,7 @@ const UsersList = () => {
           <CardHeader>
             <CardTitle>Users management</CardTitle>
             <CardDescription>
-              Enter your email below to login to your account
+              Some text describe table or module content
             </CardDescription>
             <CardAction>
               <Button onClick={() => createOrEditModal.open(undefined)}>
@@ -143,22 +148,11 @@ const UsersList = () => {
             />
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={data?.totalPages}
+              onPageChange={onPageChange}
+            />
           </CardFooter>
         </Card>
       </Content>
