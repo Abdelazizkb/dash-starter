@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_URL || "http://dash-starter.com/api";
+const baseURL = import.meta.env.VITE_API_URL || "https://dash-starter.com/api";
 
 const api = Axios.create({
   baseURL,

@@ -4,7 +4,7 @@ import type { IUser } from "@/pages/dashboard/users/list";
 import USERS from "../db.json";
 
 export const handlers = [
-  http.get("http://dash-starter.com/api/users", ({ request }) => {
+  http.get("https://dash-starter.com/api/users", ({ request }) => {
     const url = new URL(request.url);
 
     const filter = url.searchParams.get("filter");
@@ -38,24 +38,27 @@ export const handlers = [
     });
   }),
 
-  http.post("http://dash-starter.com/api/users/create", async ({ request }) => {
-    const body = (await request.json()) as IUser;
+  http.post(
+    "https://dash-starter.com/api/users/create",
+    async ({ request }) => {
+      const body = (await request.json()) as IUser;
 
-    const newUser: IUser = {
-      firstname: body.firstname,
-      lastname: body.lastname,
-      email: body.email,
-      role: body.role,
-      comment: body.comment || "",
-    };
+      const newUser: IUser = {
+        firstname: body.firstname,
+        lastname: body.lastname,
+        email: body.email,
+        role: body.role,
+        comment: body.comment || "",
+      };
 
-    return HttpResponse.json({
-      message: "User added successfully",
-      user: newUser,
-    });
-  }),
+      return HttpResponse.json({
+        message: "User added successfully",
+        user: newUser,
+      });
+    }
+  ),
 
-  http.put("http://dash-starter.com/api/users/update", async ({ request }) => {
+  http.put("https://dash-starter.com/api/users/update", async ({ request }) => {
     const body = (await request.json()) as IUser;
 
     const newUser: IUser = {
